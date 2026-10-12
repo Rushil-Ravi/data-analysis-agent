@@ -51,7 +51,7 @@ streamlit run app.py
 | Set | Questions | Result | Notes |
 |---|---|---|---|
 | Dev | 20 | 19/20 | Used while building the prompt and docs |
-| Held-out | 10 | 9/10 on first run; X/10 after the fix | The fix was tuned on the one failure, so the second number is not independent |
+| Held-out | 10 | 9/10 on first run; 10/10 after the fix | The fix was tuned on the one failure, so the second number is not independent |
 | Fresh | 5 | 5/5 | Written after the failure, run once |
 
 Answerable questions are graded against the results of gold SQL queries. Unanswerable questions are checked for a refusal, and I read those answers by hand.
