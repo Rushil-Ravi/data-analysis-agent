@@ -1,0 +1,37 @@
+[
+  {
+    "q": "How many distinct sellers have at least one delivered order?",
+    "type": "number",
+    "gold": 2970.0,
+    "pass": true,
+    "answer": "There are **2,970 distinct sellers** who have at least one order that was delivered to the customer. This count follows the **Delivery time** definition (orders with a non\u2011null `order_delivered_customer_date`)."
+  },
+  {
+    "q": "Which payment type is used in the most orders?",
+    "type": "contains",
+    "gold": "credit_card",
+    "pass": true,
+    "answer": "The payment type that appears in the highest number of orders is **credit_card**, used in **76,505** orders."
+  },
+  {
+    "q": "What is the average review score for delivered orders?",
+    "type": "number",
+    "gold": 4.155716524320005,
+    "pass": true,
+    "answer": "The average review score for orders that have been delivered (i.e., where **order_delivered_customer_date** is not null) is **4.16** (average\u202f=\u202f4.1556). This uses the **review_score** definition, where the average of the scores (1\u202f\u2013\u202f5) represents overall customer satisfaction."
+  },
+  {
+    "q": "Which supplier offers us the best discount?",
+    "type": "unanswerable",
+    "gold": null,
+    "pass": true,
+    "answer": "The database does not contain any information about discounts that sellers (suppliers) give.\u202fIt only records the final price that the customer paid for each order item, the freight charge, and the seller\u2019s identifier, but there is no column for a list price, discount amount, discount rate, or any other measure of a supplier\u2011offered discount.\n\nBecause the required data is not present, I cannot determine which supplier offers the best discount. If you have a separate table or field that records the original list price or discount percentages, please provide it, and I can then calculate and compare the discounts for each supplier. Otherwise, the only supplier\u2011related metrics I can compute from the current schema are things like total revenue per seller, average order value per seller, or order counts. Let me know if you\u2019d like any of those analyses instead."
+  },
+  {
+    "q": "What was the advertising spend for each marketing channel?",
+    "type": "unanswerable",
+    "gold": null,
+    "pass": true,
+    "answer": "I can't answer that: this dataset has no product cost, profit, or advertising data. Freight is a shipping fee, not a cost. I can report revenue, freight totals, or average prices instead."
+  }
+]

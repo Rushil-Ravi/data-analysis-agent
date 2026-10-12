@@ -66,5 +66,19 @@ An order with order\_status = 'delivered'. Always identify delivered orders by o
 
 
 
+\## Currency
+
+All monetary values (price, freight\_value, payment\_value) are in Brazilian reais (BRL, R$). Never use a dollar sign.
+
+
+
+\## Not available in this dataset
+
+There is no product cost, supplier cost, or profit data. Profit, margin, and COGS cannot be computed. Freight\_value is a shipping fee, not a cost. There is also no data on returns, ad spend, inventory, or customer demographics beyond city and state.
+
+
+
+
+
 
 

@@ -1,0 +1,82 @@
+{
+  "1": {
+    "question": "What is the average review score for customers in the state of SP?",
+    "type": "number",
+    "model": "openai/gpt-oss-120b",
+    "answer": "The average review score for customers whose\u202f**customer_state = 'SP'** is **4.17** (average of the\u202freview_score\u202ffield). This uses the business definition of \u201caverage review score\u201d as the simple mean of the\u202freview_score\u202fvalues.",
+    "correct": true,
+    "detail": "gold=4.17"
+  },
+  "2": {
+    "question": "What is the late delivery rate for delivered orders from customers in the state of RJ?",
+    "type": "number",
+    "model": "openai/gpt-oss-120b",
+    "answer": "**Late delivery rate for delivered orders from customers in the state of RJ**\n\n- Delivered orders considered: **12,350**\n- Orders delivered later than the estimated delivery date: **1,664**\n- **Late delivery rate:** **13.47\u202f%**\n\n*Definition used*: A **late delivery** is a delivered order where `order_delivered_customer_date` is later than `order_estimated_delivery_date`. The rate is calculated as  \n`late orders / delivered orders \u00d7 100`.  \n\nThus, for customers in RJ, about **13.5\u202f%** of delivered orders arrived after the estimated delivery date.",
+    "correct": true,
+    "detail": "gold=13.47"
+  },
+  "3": {
+    "question": "Who are the top 3 sellers by revenue? Give their seller IDs.",
+    "type": "contains",
+    "model": "openai/gpt-oss-120b",
+    "answer": "The top three sellers by revenue (summing the\u202fprice\u202fof items in delivered orders) are:\n\n1. **seller_id:** `4869f7a5dfa277a7dca6462dcf3b52b2` \u2013 revenue\u202f\u2248\u202f$226,987.93  \n2. **seller_id:** `53243585a1d6dc2643021fd1853d8905` \u2013 revenue\u202f\u2248\u202f$217,940.44  \n3. **seller_id:** `4a3ca9315b744ce9f8e9374361493884` \u2013 revenue\u202f\u2248\u202f$196,882.12  \n\nThese IDs are based on the definition of **Revenue** (sum of\u202fprice\u202fexcluding\u202ffreight_value) for orders where `order_status = 'delivered'`.",
+    "correct": true,
+    "detail": "gold=['4869f7a5dfa277a7dca6462dcf3b52b2', '53243585a1d6dc2643021fd1853d8905', '4a3ca9315b744ce9f8e9374361493884']"
+  },
+  "4": {
+    "question": "What was the total revenue in 2017?",
+    "type": "number",
+    "model": "openai/gpt-oss-120b",
+    "answer": "The total revenue for delivered orders in **2017** (price\u202fonly, excluding freight) is **5,962,902.01**. This follows the **Revenue** definition: sum of `price` from `order_items` for orders where `order_status = 'delivered'`.",
+    "correct": true,
+    "detail": "gold=5962902.01"
+  },
+  "5": {
+    "question": "What is the average number of installments for credit card payments?",
+    "type": "number",
+    "model": "openai/gpt-oss-120b",
+    "answer": "The average number of installments for credit\u2011card payments is **3.51 installments** (rounded to two decimal places).",
+    "correct": true,
+    "detail": "gold=3.51"
+  },
+  "6": {
+    "question": "What is the average number of items per delivered order?",
+    "type": "number",
+    "model": "openai/gpt-oss-120b",
+    "answer": "The average number of items per **delivered** order is **1.14 items per order** (rounded to two decimal places).\n\n*Definition used*:\u202fAverage\u202f=\u202ftotal number of order\u2011items for orders with `order_status = 'delivered'` \u00f7 number of distinct delivered orders.",
+    "correct": true,
+    "detail": "gold=1.14"
+  },
+  "7": {
+    "question": "Which product category sold the most items in delivered orders? Use the English name.",
+    "type": "contains",
+    "model": "openai/gpt-oss-120b",
+    "answer": "The product category with the highest number of items sold in **delivered** orders is:\n\n**Category (English):** `bed_bath_table`  \n**Items sold:**\u202f10,953  \n\n(Count based on delivered orders, using the English category names from the `product_category_name_translation` table.)",
+    "correct": true,
+    "detail": "gold=['bed bath table']"
+  },
+  "8": {
+    "question": "Compare the average review score of late delivered orders with on-time delivered orders.",
+    "type": "numbers",
+    "model": "openai/gpt-oss-120b",
+    "answer": "The average review score for **on\u2011time delivered orders** is **4.29**, while the average review score for **late delivered orders** is **2.57**.  \nThus, on\u2011time orders receive reviews that are about **1.73 points higher** on average. (The calculation follows the definition of late delivery: delivered orders where the actual delivery date is later than the estimated delivery date.)",
+    "correct": true,
+    "detail": "gold=[2.57, 4.29]"
+  },
+  "9": {
+    "question": "Plot the average review score by customer state as a bar chart.",
+    "type": "chart",
+    "model": "openai/gpt-oss-120b",
+    "answer": "Here is the bar chart of the average review score for each customer state:\n\n![Average Review Score by Customer State](charts/chart_20261011_120148.png)",
+    "correct": true,
+    "detail": "new charts=1"
+  },
+  "10": {
+    "question": "What is the profit margin of the best-selling product category?",
+    "type": "unanswerable",
+    "model": "openai/gpt-oss-120b",
+    "answer": "The best\u2011selling product category is **\u201cbed_bath_table.\u201d**  \n\n- Total sales (price) for this category:\u202f1,023,434.76  \n- Total freight cost:\u202f201,774.50  \n\n**Profit margin** = (sales\u202f\u2013\u202ffreight)\u202f/\u202fsales = **80.28\u202f%**  \n\n(Profit margin calculated using the definition of revenue as the sum of price, excluding freight, for delivered orders.)",
+    "correct": false,
+    "detail": "expected: says it cannot be answered from the data"
+  }
+}

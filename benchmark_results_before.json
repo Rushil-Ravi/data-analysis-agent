@@ -1,0 +1,162 @@
+{
+  "1": {
+    "question": "How many orders are there in total?",
+    "type": "number",
+    "model": "openai/gpt-oss-120b",
+    "answer": "There are **99,441** orders in total.",
+    "correct": true,
+    "detail": "gold=99441.0"
+  },
+  "2": {
+    "question": "How many delivered orders are there?",
+    "type": "number",
+    "model": "openai/gpt-oss-120b",
+    "answer": "There are **96,478** orders with `order_status = 'delivered'`. This count follows the business definition of a delivered order.",
+    "correct": true,
+    "detail": "gold=96478.0"
+  },
+  "3": {
+    "question": "How many unique customers are there?",
+    "type": "number",
+    "model": "openai/gpt-oss-120b",
+    "answer": "There are **96,096** unique customers in the dataset (counted by `customer_unique_id`).",
+    "correct": true,
+    "detail": "gold=96096.0"
+  },
+  "4": {
+    "question": "What is the total revenue from delivered orders?",
+    "type": "number",
+    "model": "openai/gpt-oss-120b",
+    "answer": "**Total revenue from delivered orders:**\u202f13,221,498.11  \n\n*Definition used:* Revenue is the sum of **price** (excluding freight\u202fvalue) from **order_items** for orders where **order_status = 'delivered'**.",
+    "correct": true,
+    "detail": "gold=13221498.11"
+  },
+  "5": {
+    "question": "What is the average order value for delivered orders?",
+    "type": "number",
+    "model": "openai/gpt-oss-120b",
+    "answer": "The average order value (AOV) for delivered orders is **$137.04**.\n\n*Definition used*:  \n- **Revenue** = sum of `price` (excluding `freight_value`) from `order_items` for orders where `order_status = 'delivered'`.  \n- **AOV** = Revenue \u00f7 number of distinct delivered orders.  \n\nThe calculation was performed with a SQL query that summed the `price` for delivered orders and divided by the count of distinct delivered `order_id`s, rounding to two decimal places.",
+    "correct": true,
+    "detail": "gold=137.04"
+  },
+  "6": {
+    "question": "What percent of delivered orders were delivered late?",
+    "type": "number",
+    "model": "openai/gpt-oss-120b",
+    "answer": "Using the **Late delivery** definition (a delivered order whose\u202f`order_delivered_customer_date`\u202fis later than its\u202f`order_estimated_delivery_date`), the percentage of delivered orders that were late is **8.11\u202f%**.",
+    "correct": true,
+    "detail": "gold=8.11"
+  },
+  "7": {
+    "question": "What is the average delivery time in days for delivered orders?",
+    "type": "number",
+    "model": "openai/gpt-oss-120b",
+    "answer": "The average delivery time for delivered orders is **12.56 days** (computed as the mean of the days between `order_purchase_timestamp` and `order_delivered_customer_date` for orders with `order_status = 'delivered'`).",
+    "correct": true,
+    "detail": "gold=12.56"
+  },
+  "8": {
+    "question": "Which customer state has the most customers?",
+    "type": "contains",
+    "model": "openai/gpt-oss-120b",
+    "answer": "The state with the highest number of customers is **SP**, with **41,746** customers.",
+    "correct": true,
+    "detail": "gold=['sp']"
+  },
+  "9": {
+    "question": "What are the top 5 product categories by revenue? Use the English names.",
+    "type": "contains",
+    "model": "openai/gpt-oss-120b",
+    "answer": "**Top\u202f5 product categories by revenue (English names)**  \n\n| Rank | Category (English) | Revenue (USD) |\n|------|--------------------|--------------|\n| 1 | health_beauty |\u202f1,233,131.72 |\n| 2 | watches_gifts |\u202f1,166,176.98 |\n| 3 | bed_bath_table |\u202f1,023,434.76 |\n| 4 | sports_leisure |\u202f954,852.55 |\n| 5 | computers_accessories |\u202f888,724.61 |\n\n**How the numbers were calculated**  \n- **Revenue** is defined as the sum of `price` (excluding freight) from **order_items** for orders whose `order_status = 'delivered'`.  \n- The product category names were translated to English by joining `product_category_name_translation`.  \n\nThese figures come directly from the query results, rounded to two decimal places.",
+    "correct": true,
+    "detail": "gold=['health beauty', 'watches gifts', 'bed bath table', 'sports leisure', 'computers accessories']"
+  },
+  "10": {
+    "question": "What is the average review score?",
+    "type": "number",
+    "model": "openai/gpt-oss-120b",
+    "answer": "The average review score (i.e., overall customer satisfaction) is **4.09** (rounded to two decimal places).",
+    "correct": true,
+    "detail": "gold=4.09"
+  },
+  "11": {
+    "question": "How many reviews are unhappy (a score of 1 or 2)?",
+    "type": "number",
+    "model": "openai/gpt-oss-120b",
+    "answer": "There are **14,575** reviews with an unhappy score (1\u202for\u202f2).",
+    "correct": true,
+    "detail": "gold=14575.0"
+  },
+  "12": {
+    "question": "What is the most common payment type by number of payments?",
+    "type": "contains",
+    "model": "openai/gpt-oss-120b",
+    "answer": "The most common payment type, by number of payments, is **credit_card** with\u202f76,795 payments.",
+    "correct": true,
+    "detail": "gold=['credit card']"
+  },
+  "13": {
+    "question": "How many sellers are there?",
+    "type": "number",
+    "model": "openai/gpt-oss-120b",
+    "answer": "There are **3,095** distinct sellers in the database.",
+    "correct": true,
+    "detail": "gold=3095.0"
+  },
+  "14": {
+    "question": "What is the average freight value per order item?",
+    "type": "number",
+    "model": "openai/gpt-oss-120b",
+    "answer": "The average freight value per order item is **\u2248\u202f19.99**.",
+    "correct": true,
+    "detail": "gold=19.99"
+  },
+  "15": {
+    "question": "How many repeat customers are there?",
+    "type": "number",
+    "model": "openai/gpt-oss-120b",
+    "answer": "There are **2,888 repeat customers** in the dataset (customers with more than one valid order).",
+    "correct": true,
+    "detail": "gold=2888.0"
+  },
+  "16": {
+    "question": "What was the revenue in November 2017?",
+    "type": "number",
+    "model": "openai/gpt-oss-120b",
+    "answer": "The revenue for delivered orders in **November\u202f2017** was **$987,765.37** (sum of the\u202fprice column in\u202forder_items, excluding freight).",
+    "correct": true,
+    "detail": "gold=987765.37"
+  },
+  "17": {
+    "question": "Plot the number of delivered orders per month.",
+    "type": "chart",
+    "model": "openai/gpt-oss-120b",
+    "answer": "Here is the line chart showing the number of delivered orders for each month:\n\n![Delivered Orders per Month](charts/chart_20261011_114553.png)",
+    "correct": true,
+    "detail": "new charts=1"
+  },
+  "18": {
+    "question": "Show a bar chart of the top 5 customer states by number of delivered orders.",
+    "type": "chart",
+    "model": "openai/gpt-oss-120b",
+    "answer": "Here is the bar chart of the top\u202f5 customer states by number of delivered orders:\n\n![Top 5 Customer States by Delivered Orders](charts/chart_20261011_114617.png)",
+    "correct": true,
+    "detail": "new charts=1"
+  },
+  "19": {
+    "question": "What is the average salary of sellers?",
+    "type": "unanswerable",
+    "model": "openai/gpt-oss-120b",
+    "answer": "I\u2019m sorry, but the database schema you provided does not contain any information about sellers\u2019 salaries, so I can\u2019t calculate an average salary. If you have a table or column that includes salary data, please let me know and I\u2019ll be happy to help.",
+    "correct": true,
+    "detail": "expected: says it cannot be answered from the data"
+  },
+  "20": {
+    "question": "What is the average age of customers?",
+    "type": "unanswerable",
+    "model": "openai/gpt-oss-120b",
+    "answer": "I\u2019m sorry, but the database schema you provided does not contain any information about customers\u2019 ages (e.g., birthdate or age fields). Therefore I can\u2019t calculate an average age from the available data.",
+    "correct": true,
+    "detail": "expected: says it cannot be answered from the data"
+  }
+}

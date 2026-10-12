@@ -1,10 +1,11 @@
+import re
+
 from dotenv import load_dotenv
+from groq import BadRequestError
 from langchain_groq import ChatGroq
-from langchain_core.messages import AIMessage, SystemMessage
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langgraph.graph import StateGraph, MessagesState, START, END
 from langgraph.prebuilt import ToolNode, tools_condition
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
-from groq import BadRequestError
 
 from tools import run_sql, run_python, make_chart, get_schema
 from retriever import retrieve_context
@@ -30,11 +31,26 @@ Rules:
 - Call one tool at a time and wait for its result before calling the next.
 - If a tool returns an ERROR, read the message, fix the problem, and try again.
 - Never guess numbers. Base your answer only on tool results.
+- Mention which definition you used. If you made a chart, give its file path.
 - You only see a preview of large results. Do not describe rows you have not seen; use run_python for exact numbers such as min, max, or counts.
 - Compute counts, sums, ratios, and percentages directly inside the SQL query, for example ROUND(100.0 * SUM(CASE WHEN ... THEN 1 ELSE 0 END) / COUNT(*), 2). Use run_python only when SQL cannot do it.
-- Use plain text for math; do not use LaTeX.
+- Use plain text for math; do not use LaTeX or formulas in brackets.
 - If the schema cannot answer the question, say so instead of guessing.
-- Mention which definition you used. If you made a chart, give its file path."""
+- Profit, margin, cost of goods, ROI, and anything else needing cost data CANNOT be answered: the database has no product cost data. Freight is a shipping charge paid by the customer, not a cost. Never approximate these with freight or any other column. Say the data does not contain it, then offer what you can compute (revenue, freight totals, average price).
+- All money values are in Brazilian reais (BRL). Write amounts like "137.04 BRL". Never use a dollar sign."""
+
+# Questions that need data this dataset does not have. A keyword check is blunt,
+# but it does not depend on the model following instructions.
+UNANSWERABLE = re.compile(
+    r"\b(profit|profits|profitability|margin|margins|cogs|cost of goods|roi|"
+    r"return on investment|ad spend|advertising|marketing spend)\b",
+    re.I,
+)
+REFUSAL = (
+    "I can't answer that: this dataset has no product cost, profit, or advertising data. "
+    "Freight is a shipping fee, not a cost. I can report revenue, freight totals, "
+    "or average prices instead."
+)
 
 
 class AgentState(MessagesState):
@@ -45,6 +61,17 @@ class AgentState(MessagesState):
 tools = [run_sql, run_python, make_chart]
 tool_node = ToolNode(tools)
 llm_with_tools = ChatGroq(model=MODEL, temperature=0).bind_tools(tools)
+
+
+def guard(state: AgentState):
+    question = state["messages"][-1].content
+    if UNANSWERABLE.search(question):
+        return {"messages": [AIMessage(content=REFUSAL)]}
+    return {}
+
+
+def after_guard(state: AgentState):
+    return "end" if isinstance(state["messages"][-1], AIMessage) else "retrieve"
 
 
 def retrieve(state: AgentState):
@@ -76,6 +103,7 @@ def agent(state: AgentState):
         ]
     }
 
+
 def run_tools(state: AgentState):
     result = tool_node.invoke(state)
     errors = state.get("errors", 0)
@@ -100,12 +128,14 @@ def give_up(state: AgentState):
 
 
 graph = StateGraph(AgentState)
+graph.add_node("guard", guard)
 graph.add_node("retrieve", retrieve)
 graph.add_node("agent", agent)
 graph.add_node("tools", run_tools)
 graph.add_node("give_up", give_up)
 
-graph.add_edge(START, "retrieve")
+graph.add_edge(START, "guard")
+graph.add_conditional_edges("guard", after_guard, {"end": END, "retrieve": "retrieve"})
 graph.add_edge("retrieve", "agent")
 graph.add_conditional_edges("agent", tools_condition)  # goes to "tools" or ends
 graph.add_conditional_edges("tools", after_tools, {"agent": "agent", "give_up": "give_up"})
